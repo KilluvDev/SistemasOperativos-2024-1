@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
 	while((directorio = readdir(folder))){
 		printf("%s\n", directorio->d_name);
+		 
 	}
 	closedir(folder);
 
