@@ -122,7 +122,6 @@ int main(int argc, char *argv[])
 	int number;
 	while ((directorio = readdir(folder)))
 	{
-
 		for (int i = 0; i < strlen(directorio->d_name); i++)
 		{
 			if (isdigit(directorio->d_name[i]))
