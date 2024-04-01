@@ -17,41 +17,53 @@ void Registro()
 	archivo = fopen("RegistroPokemon.txt", "w");
 	fprintf(archivo, "Generación\n");
 	sprintf(path, "./Generación/I");
-	c = -2;
+	c = 0;
 	folder = opendir(path);
 	while ((directorio = readdir(folder)))
-	{
-		c++;
+	{	
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
+			{
+			c++;
+			}
 	}
 	fprintf(archivo, "I - %d\n", c);
 	closedir(folder);
 
 	sprintf(path, "./Generación/II");
-	c = -2;
+	c = 0;
 	folder = opendir(path);
 	while ((directorio = readdir(folder)))
 	{
-		c++;
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
+			{
+			c++;
+			}
 	}
 	fprintf(archivo, "II - %d\n", c);
 	closedir(folder);
 
 	sprintf(path, "./Generación/III");
-	c = -2;
+	c = 0;
 	folder = opendir(path);
 	while ((directorio = readdir(folder)))
 	{
-		c++;
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
+			{
+			c++;
+			}
 	}
 	fprintf(archivo, "III - %d\n", c);
 	closedir(folder);
 
 	sprintf(path, "./Generación/IV");
-	c = -2;
+	c = 0;
 	folder = opendir(path);
 	while ((directorio = readdir(folder)))
 	{
-		c++;
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
+			{
+			c++;
+			}
 	}
 	fprintf(archivo, "IV - %d\n", c);
 	closedir(folder);
@@ -59,12 +71,16 @@ void Registro()
 	fprintf(archivo, "Alfabético\n");
 	for (letra = 'A'; letra <= 'Z'; letra++)
 	{
-		c = -2;
+		c = 0;
+
 		sprintf(path, "./Alfabético/%c", letra);
 		folder = opendir(path);
 		while ((directorio = readdir(folder)))
 		{
+			if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
+			{
 			c++;
+			}
 		}
 		closedir(folder);
 		fprintf(archivo, "%c - %d\n", letra, c);
@@ -106,6 +122,7 @@ int main(int argc, char *argv[])
 	folder = opendir("./Sprites");
 	while ((directorio = readdir(folder)))
 	{
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0){
 		strcpy(destino, rutaInicial);
 		letter[0] = directorio->d_name[0] - 32;
 		letter[1] = '/';
@@ -116,40 +133,59 @@ int main(int argc, char *argv[])
 		sprintf(comando, "cp %s %s", origen, destino);
 		system(comando);
 	}
+	}
 	closedir(folder);
 
 	folder = opendir("./Sprites");
 	int number;
 	while ((directorio = readdir(folder)))
 	{
-		for (int i = 0; i < strlen(directorio->d_name); i++)
+		if(strcmp(directorio->d_name,".")!=0 && strcmp(directorio->d_name,"..")!=0)
 		{
-			if (isdigit(directorio->d_name[i]))
+			for (int i = 0; i < strlen(directorio->d_name); i++)
 			{
+			if (isdigit(directorio->d_name[i]))
+			{	
+				if(strcmp(directorio->d_name,"porygon2_233.png")==0){
+					number=233;
+					break;
+				}
+				else
+				{
 				number = atoi(&directorio->d_name[i]);
 				break;
+				}
 			}
-		}
+			}
 		sprintf(origen, "./Sprites/%s", directorio->d_name);
 		if (number >= 1 && number <= 151)
-		{
+			{
 			sprintf(comando, "cp %s ./Generación/I/%s", origen, directorio->d_name);
 			system(comando);
-		}
+			sprintf(comando,"rm ./Sprites/%s",directorio->d_name);
+			system(comando);
+			}
 		else if (number > 151 && number <= 251)
-		{
+			{
 			sprintf(comando, "cp %s ./Generación/II/%s", origen, directorio->d_name);
 			system(comando);
-		}
+			sprintf(comando,"rm ./Sprites/%s",directorio->d_name);
+			system(comando);
+			}
 		else if (number > 251 && number <= 386)
-		{
+			{
 			sprintf(comando, "cp %s ./Generación/III/%s", origen, directorio->d_name);
 			system(comando);
-		}
+			sprintf(comando,"rm ./Sprites/%s",directorio->d_name);
+			system(comando);
+			}
 		else if (number > 386 && number <= 493)
-		{
+			{
 			sprintf(comando, "cp %s ./Generación/IV/%s", origen, directorio->d_name);
 			system(comando);
+			sprintf(comando,"rm ./Sprites/%s",directorio->d_name);
+			system(comando);
+			}
 		}
 	}
 	closedir(folder);
