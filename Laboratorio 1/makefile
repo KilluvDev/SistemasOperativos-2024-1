@@ -1,11 +1,19 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
-TARGET = pokemon
-SRCS = Pokemon.c
+a.out: Pokemon.c
+	gcc Pokemon.c
 
-$(TARGET): $(SRCS)
-    $(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
+Sprites: Sprites.zip
+	unzip -q Sprites.zip -d .
+	rm -rf "__MACOSX"
+
+.PHONY: run clean
+
+run: clean Sprites a.out
+	./a.out
 
 clean:
-    rm -f $(TARGET)
-
+	rm a.out || true
+	rm RegistroPokemon.txt || true
+	rm -rf "__MACOSX"
+	rm -rf "Alfabético"
+	rm -rf "Generación"
+	rm -rf "Sprites"
