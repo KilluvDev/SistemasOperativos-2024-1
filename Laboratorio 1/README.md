@@ -1,16 +1,14 @@
 Laboratorio 1 Sistemas Operativos.
 ----------
-Integrantes:
 
-- Ignacio Trujillo
-- 202173603-4
-- Par 200
+### Integrantes:
 
-- Sebastian Guerra
-- 202173563-1
-- Par 200
+| Nombre           | Rol         | Paralelo |
+|------------------|-------------|----------|
+| Ignacio Trujillo | 202173603-4 | 200      |
+| Sebastian Guerra | 202173563-1 | 200      |
 
-----------
+---
 
 Nombres de archivos y directorios.
 
@@ -20,6 +18,6 @@ De cumplirse lo previamente descrito, se generarán dos directorios en el direct
 
 En caso de querer ejecutar el codigo más de una vez, ejecutar `make run` en el directorio donde se encuentra el archivo makefile
 
-----------
+---
 
 Fue realizado con un compilado gcc -o out Pokemon.c
