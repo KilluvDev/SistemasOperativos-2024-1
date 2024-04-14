@@ -2,12 +2,21 @@
 #define TYPES_H
 
 #include <unistd.h>
+#include <stdbool.h>
 
 typedef struct {
     short int id;
     pid_t pid;
     int tell;
     int listen;
+    bool alive;
 } children;
+
+typedef enum {
+    ATTACK,
+    SHOW_STATS,
+    UPDATE_ALIVE_STATUS,
+    EXIT
+} message_type;
 
 #endif

@@ -20,10 +20,16 @@ int main(){
 
     while(id--){
         int pipe_p2c[2], pipe_c2p[2];
-        pipe(pipe_p2c);
-        pipe(pipe_c2p);
+        if (pipe(pipe_p2c) == -1 || pipe(pipe_c2p) == -1) {
+            perror("pipe");
+            exit(1);
+        }
 
         pid_t pid_children = fork();
+        if(pid_children == -1){
+            perror("fork");
+            exit(1);
+        }
 
         if(pid_children == 0){
             listen_parent = pipe_p2c[0];
@@ -36,6 +42,7 @@ int main(){
 
         childrens[id].id = id;
         childrens[id].pid = pid_children;
+        childrens[id].alive = true;
 
         childrens[id].tell = pipe_p2c[1];
         close(pipe_p2c[0]);
