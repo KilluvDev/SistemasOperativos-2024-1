@@ -10,11 +10,4 @@ typedef struct {
     int listen;
 } children;
 
-typedef struct {
-    int life;
-    int attack;
-    int defense;
-    int evasion;
-} player;
-
 #endif

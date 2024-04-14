@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 
 #include "types.h"
+#include "parent.h"
+#include "children.h"
 
 int main(){
     short int n_players = 4;
@@ -41,37 +43,16 @@ int main(){
         childrens[id].listen = pipe_c2p[0];
         close(pipe_c2p[1]);
     }
+
+    // Seed for random numbers
     srand(time(NULL) + id);
 
-    player stats;
-
-    if (id >= 0) {
-        stats.life = 100;
-        stats.attack = 30 + rand() % 11;
-        stats.defense = 10 + rand() % 16;
-        stats.evasion = 60 - stats.defense;
-    }
-
     if (id == -1) {
-        for(int i = 5; i >= 0; i--){
-            printf("%d\n", i);
-            sleep(1);
-            if (i == 0) {
-                for (int j = 0; j < n_players; j++) {
-                    char *msg = "exit";
-                    write(childrens[j].tell, msg, strlen(msg) + 1);
-                }
-            }
-        }
+        // Parent
+        make_rounds(childrens, n_players);
     } else {
-        for(;;) {
-            char msg[100];
-            read(listen_parent, msg, 100);
-            if (strcmp(msg, "exit") == 0) {
-                printf("Player %d is exiting\n", id);
-                break;
-            }
-        }
+        // Players
+        main_loop(id, listen_parent, tell_parent);
     }
 
     while(wait(NULL) > 0);
