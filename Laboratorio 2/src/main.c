@@ -6,15 +6,15 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#include "settings.h"
 #include "types.h"
 #include "parent.h"
 #include "children.h"
 
 int main(){
-    short int n_players = 4;
-    short int id = n_players;
+    short int id = N_PLAYERS;
 
-    children childrens[n_players];
+    children childrens[N_PLAYERS];
 
     int listen_parent, tell_parent;
 
@@ -49,7 +49,7 @@ int main(){
 
     if (id == -1) {
         // Parent
-        make_rounds(childrens, n_players);
+        make_rounds(childrens);
     } else {
         // Players
         main_loop(id, listen_parent, tell_parent);
