@@ -18,9 +18,9 @@ int main(){
 
     while(id--){
         int pipe_p2c[2], pipe_c2p[2];
-
         pipe(pipe_p2c);
         pipe(pipe_c2p);
+
         pid_t pid_children = fork();
 
         if(pid_children == 0){
