@@ -12,11 +12,4 @@ typedef struct {
     bool alive;
 } children;
 
-typedef enum {
-    ATTACK,
-    SHOW_STATS,
-    UPDATE_ALIVE_STATUS,
-    EXIT
-} message_type;
-
 #endif
