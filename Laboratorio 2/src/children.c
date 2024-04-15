@@ -130,6 +130,14 @@ bool starts_with(const char msg[MSG_SIZE], const char *str) {
             : (strncmp(msg, str, lenstr) == 0);
 }
 
+/**
+ * @brief Extracts the integers from a string
+ *
+ * @param msg The message to extract the integers from
+ * @param list The list to store the integers
+ * @param alive The number of integers extracted
+ * @param skip The number to skip
+ */
 void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip) {
     char *c = msg;
     int i = 0;
@@ -147,6 +155,15 @@ void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *aliv
     }
 }
 
+/**
+ * @brief Checks if the target is in the list of players
+ *
+ * @param target The target to check
+ * @param players The list of players
+ * @param alive The number of alive players
+ * @return true
+ * @return false
+ */
 bool check_valid_target(int target, int players[N_PLAYERS], int alive) {
     for (int i = 0; i < alive; i++) {
         if (players[i] == target) return true;
