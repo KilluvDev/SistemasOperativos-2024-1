@@ -68,6 +68,7 @@ void main_loop(int id, int listen_parent, int tell_parent) {
                     printf("Invalid target, choose again: ");
                     scanf("%d", &target);
                 }
+                printf("\n");
             }
             sprintf(msg, "attack %d %d %d", attack, target, id);
             write(tell_parent, msg, MSG_SIZE);
@@ -87,7 +88,15 @@ void main_loop(int id, int listen_parent, int tell_parent) {
             int damage = received_damage - defense;
             if (damage < 0) damage = 0;
             life -= damage;
-            printf("Player %d received %d damage from player %d\n", id, received_damage, from);
+            printf(
+                "Player %d received %d (%d-%d) damage from player %d, leaving him with %d HP\n",
+                id,
+                damage,
+                received_damage,
+                defense,
+                from,
+                life
+            );
             continue;
         }
 
@@ -111,7 +120,6 @@ void main_loop(int id, int listen_parent, int tell_parent) {
 
     close(listen_parent);
     close(tell_parent);
-    printf("Player %d is exiting\n", id);
 }
 
 bool starts_with(const char msg[MSG_SIZE], const char *str) {
