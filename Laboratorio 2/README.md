@@ -11,4 +11,6 @@
 
 ---
 
-Fue realizado con un compilado gcc -o out Pokemon.c
+Para compilar y ejecutar se puede usar el comando `make` desde la raíz del proyecto
+
+Para probar con linux se usó docker con el comando `docker build . -t "lab2so" && docker run -it lab2so`
