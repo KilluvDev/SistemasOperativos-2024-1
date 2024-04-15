@@ -20,13 +20,26 @@ void make_rounds(children childrens[N_PLAYERS]){
         make_players_choose(childrens);
         ping_players(childrens); // Wait for all players
         show_stats(childrens);
-        ping_players(childrens); // Wait for all players
+        if (!childrens[0].alive) sleep(1); // So it doesnt go too fast
     }
     printf("Game is over\n");
     show_stats(childrens);
 
-    if (childrens[0].alive) printf("Congratulations, you won!\n");
-    else printf("You lost, better luck next time\n");
+    if (childrens[0].alive) {
+        printf("Congratulations, you won!\n");
+    } else {
+        printf("You lost, better luck next time\n");
+        if (alive_count(childrens) == 1) {
+            for (int i = 0; i < N_PLAYERS; i++) {
+                if (childrens[i].alive) {
+                    printf("Player %d won\n", i);
+                }
+            }
+        } else {
+            int random_winner = rand() % N_PLAYERS;
+            printf("There was a draw, player %d won\n", random_winner);
+        }
+    }
 
     tell_players(childrens, "exit");
 }
@@ -69,7 +82,7 @@ void ping_players(children childrens[N_PLAYERS]){
 }
 
 void make_players_choose(children childrens[N_PLAYERS]){
-    ping_players(childrens);
+    ping_players(childrens); // Sinc and update alive status
     char msg[MSG_SIZE] = "choose ";
 
     for(int i = 0; i < N_PLAYERS; i++){
@@ -80,9 +93,11 @@ void make_players_choose(children childrens[N_PLAYERS]){
         }
     }
 
-    write(childrens[0].tell, msg, MSG_SIZE);
     char user_msg[MSG_SIZE];
-    read(childrens[0].listen, user_msg, MSG_SIZE);
+    if (childrens[0].alive) {
+        write(childrens[0].tell, msg, MSG_SIZE);
+        read(childrens[0].listen, user_msg, MSG_SIZE);
+    }
 
     int target;
     int attack;
@@ -93,8 +108,10 @@ void make_players_choose(children childrens[N_PLAYERS]){
         }
     }
 
-    sscanf(user_msg, "attack %d %d", &attack, &target);
-    write(childrens[target].tell, user_msg, MSG_SIZE);
+    if (childrens[0].alive) {
+        sscanf(user_msg, "attack %d %d", &attack, &target);
+        write(childrens[target].tell, user_msg, MSG_SIZE);
+    }
     for(int i = 1; i < N_PLAYERS; i++){
         if(childrens[i].alive){
             read(childrens[i].listen, msg, MSG_SIZE);
