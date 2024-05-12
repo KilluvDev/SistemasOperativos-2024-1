@@ -11,52 +11,85 @@ bool starts_with(const char *pre, const char *str);
 void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip);
 bool check_valid_target(int target, int players[N_PLAYERS], int alive);
 
-void main_loop(int id, int listen_parent, int tell_parent) {
+void main_loop(int id, int listen_parent, int tell_parent)
+{
+    /*
+    Función main_loop.
+    tipo void.
+    *****
+    Parámetros:
+    int id 
+    int listen_parent
+    int tell_parent
+
+
+    int id  
+    int listen_parent
+    int tell_parent
+    *****
+    La función ejecuta el loop del combate entre jugadores realizando los cambios de estado de jugadores,
+    finalmente elige el ganador.
+    *****
+    Sin retorno.
+    */
     int life = 100;
     int attack = 30 + rand() % 11;
     int defense = 10 + rand() % 16;
     int evasion = 60 - defense;
 
     char msg[MSG_SIZE];
-    while(1) {
-        if (life <= 0) break;
+    while (1)
+    {
+        if (life <= 0)
+            break;
         read(listen_parent, msg, MSG_SIZE);
 
-        if (strcmp(msg, "exit") == 0) {
+        if (strcmp(msg, "exit") == 0)
+        {
             break;
         }
 
-        if (strcmp(msg, "ping") == 0) {
+        if (strcmp(msg, "ping") == 0)
+        {
             write(tell_parent, "pong", MSG_SIZE);
             continue;
         }
 
-        if (strcmp(msg, "show_stats") == 0) {
-            if (id) {
+        if (strcmp(msg, "show_stats") == 0)
+        {
+            if (id)
+            {
                 // Bot
                 printf("Player (%d): %d HP | %d Attack | %d Defence | %d%% Evasión\n", id, life, attack, defense, evasion);
-            } else {
+            }
+            else
+            {
                 // User
                 printf("Your stats: %d HP | %d Attack | %d Defence | %d%% Evasion\n", life, attack, defense, evasion);
             }
             continue;
         }
 
-        if (starts_with(msg, "choose ")) {
+        if (starts_with(msg, "choose "))
+        {
             int players[N_PLAYERS];
             int alive;
             extract_ints_from_string(msg, players, &alive, id);
             int target;
 
-            if (id > 0) {
+            if (id > 0)
+            {
                 // Bot
                 target = players[rand() % alive];
                 printf("Player %d chose to attack player %d\n", id, target);
-            } else {
+            }
+            else
+            {
                 // User
                 char text[100];
                 sprintf(text, "Choose a player to attack (%d", players[0]);
-                for (int i = 1; i < alive && i > 0; i++) {
+                for (int i = 1; i < alive && i > 0; i++)
+                {
                     char temp[10];
                     sprintf(temp, ", %d", players[i]);
                     strcat(text, temp);
@@ -64,7 +97,8 @@ void main_loop(int id, int listen_parent, int tell_parent) {
                 strcat(text, "): ");
                 printf("%s ", text);
                 scanf("%d", &target);
-                while (!check_valid_target(target, players, alive)) {
+                while (!check_valid_target(target, players, alive))
+                {
                     printf("Invalid target, choose again: ");
                     scanf("%d", &target);
                 }
@@ -75,18 +109,21 @@ void main_loop(int id, int listen_parent, int tell_parent) {
             continue;
         }
 
-        if (starts_with(msg, "attack")) {
+        if (starts_with(msg, "attack"))
+        {
             int received_damage;
             int target;
             int from;
             sscanf(msg, "attack %d %d %d", &received_damage, &target, &from);
 
-            if (rand() % 100 < evasion) {
+            if (rand() % 100 < evasion)
+            {
                 printf("Player %d evaded the attack from player %d\n", id, from);
                 continue;
             }
             int damage = received_damage - defense;
-            if (damage < 0) damage = 0;
+            if (damage < 0)
+                damage = 0;
             life -= damage;
             printf(
                 "Player %d received %d (%d-%d) damage from player %d, leaving him with %d HP\n",
@@ -95,8 +132,7 @@ void main_loop(int id, int listen_parent, int tell_parent) {
                 received_damage,
                 defense,
                 from,
-                life
-            );
+                life);
             continue;
         }
 
@@ -105,13 +141,16 @@ void main_loop(int id, int listen_parent, int tell_parent) {
 
     printf("Player %d is dead\n", id);
 
-    while(1) {
+    while (1)
+    {
         // Wait for parent to send exit message
 
-        if (strcmp(msg, "exit") == 0) {
+        if (strcmp(msg, "exit") == 0)
+        {
             break;
         }
-        if (strcmp(msg, "ping") == 0) {
+        if (strcmp(msg, "ping") == 0)
+        {
             write(tell_parent, "dead", MSG_SIZE);
         }
 
@@ -122,12 +161,28 @@ void main_loop(int id, int listen_parent, int tell_parent) {
     close(tell_parent);
 }
 
-bool starts_with(const char msg[MSG_SIZE], const char *str) {
+bool starts_with(const char msg[MSG_SIZE], const char *str)
+{
+    /*
+    Función starts_width.
+    tipo bool.
+    *****
+    Parámetros:
+    const char msg[MSG_SIZE]
+    const char *str
+
+    const char msg[MSG_SIZE] es un array de char
+    const char *str es un array de char
+    *****
+    La función 
+    *****
+    Retorna verdadero o falso.
+    */
     size_t lenmsg = strlen(msg),
            lenstr = strlen(str);
     return lenmsg < lenstr
-            ? false
-            : (strncmp(msg, str, lenstr) == 0);
+               ? false
+               : (strncmp(msg, str, lenstr) == 0);
 }
 
 /**
@@ -138,18 +193,43 @@ bool starts_with(const char msg[MSG_SIZE], const char *str) {
  * @param alive The number of integers extracted
  * @param skip The number to skip
  */
-void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip) {
+void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip)
+{
+    /*
+    Función extract_ints_from_string.
+    tipo void.
+    *****
+    Parámetros:
+    char msg[MSG_SIZE]
+    int list[N_PLAYERS]
+    int *alive
+    int skip
+
+    msg[MSG_SIZE] es un array de char con su respectivo tamaño
+    int list[N_PLAYERS] es un array de enteros con la cantidad de jugadores
+    int *alive es el puntero de si el jugador está con vida
+    int skip
+    *****
+    La función extrae enteros de un string
+    *****
+    Sin retorno.
+    */
     char *c = msg;
     int i = 0;
     *alive = 0;
-    while (*c) {
-        if (isdigit(*c)) {
+    while (*c)
+    {
+        if (isdigit(*c))
+        {
             int number = strtol(c, &c, 10);
-            if (number == skip) continue;
+            if (number == skip)
+                continue;
             list[i] = number;
             i++;
             (*alive)++;
-        } else {
+        }
+        else
+        {
             c++;
         }
     }
@@ -164,9 +244,29 @@ void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *aliv
  * @return true
  * @return false
  */
-bool check_valid_target(int target, int players[N_PLAYERS], int alive) {
-    for (int i = 0; i < alive; i++) {
-        if (players[i] == target) return true;
+bool check_valid_target(int target, int players[N_PLAYERS], int alive)
+{
+    /*
+    Función check_valid_target.
+    tipo bool.
+    *****
+    Parámetros:
+    int target
+    int players[N_PLAYERS]
+    int alive
+
+    int target es el número de jugador.
+    int players es un array de los jugadores con su respectivo índice
+    int alive indica si el objetivo tiene vida.
+    *****
+    La función revisa que el objetivo esté con vida.
+    *****
+    Retorna verdadero o falso.
+    */
+    for (int i = 0; i < alive; i++)
+    {
+        if (players[i] == target)
+            return true;
     }
     return false;
 }
