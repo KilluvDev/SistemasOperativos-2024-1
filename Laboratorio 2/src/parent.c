@@ -14,9 +14,9 @@ void ping_players(children childrens[N_PLAYERS]);
 void make_players_choose(children childrens[N_PLAYERS]);
 
 /**
- * @brief Main loop of the parent process, manages the game. It will keep running until there is only one player left
+ * @brief Bucle principal del proceso padre, gestiona el juego. Se ejecutará hasta que solo quede un jugador.
  *
- * @param childrens The array of children processes, with their respective pipes
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
  */
 void make_rounds(children childrens[N_PLAYERS])
 {
@@ -24,10 +24,10 @@ void make_rounds(children childrens[N_PLAYERS])
     while (alive_count(childrens) > 1)
     {
         make_players_choose(childrens);
-        ping_players(childrens); // Wait for all players
+        ping_players(childrens); // Esperar a que todos los jugadores respondan
         show_stats(childrens);
         if (!childrens[0].alive)
-            sleep(1); // So it doesnt go too fast
+            sleep(1); // Para que no vaya demasiado rápido
     }
     printf("Game is over\n");
     show_stats(childrens);
@@ -63,10 +63,10 @@ void make_rounds(children childrens[N_PLAYERS])
 }
 
 /**
- * @brief Sends a message to all players
+ * @brief Envía un mensaje a todos los jugadores
  *
- * @param childrens The array of children processes, with their respective pipes
- * @param msg The message to send
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
+ * @param msg El mensaje a enviar
  */
 void tell_players(children childrens[N_PLAYERS], char msg[MSG_SIZE])
 {
@@ -77,10 +77,10 @@ void tell_players(children childrens[N_PLAYERS], char msg[MSG_SIZE])
 }
 
 /**
- * @brief Counts the amount of players that are still alive
+ * @brief Cuenta la cantidad de jugadores que siguen vivos
  *
- * @param childrens The array of children processes, with their respective pipes
- * @return The amount of players alive
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
+ * @return La cantidad de jugadores vivos
  */
 int alive_count(children childrens[N_PLAYERS])
 {
@@ -96,24 +96,24 @@ int alive_count(children childrens[N_PLAYERS])
 }
 
 /**
- * @brief Tells each player to show their stats
+ * @brief Indica a cada jugador que muestre sus estadísticas
  *
- * @param childrens The array of children processes, with their respective pipes
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
  */
 void show_stats(children childrens[N_PLAYERS])
 {
     printf("\n##################### Showing stats #####################\n");
 
     tell_players(childrens, "show_stats");
-    ping_players(childrens); // Wait for all players
+    ping_players(childrens); // Esperar a que todos los jugadores respondan
 
     printf("#########################################################\n\n");
 }
 
 /**
- * @brief Pings all players to check if they are still alive. As side effect, it can also be used to synchronize the players
+ * @brief Envía un ping a todos los jugadores para comprobar si siguen vivos. Como efecto secundario, también se puede utilizar para sincronizar a los jugadores.
  *
- * @param childrens The array of children processes, with their respective pipes
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
  */
 void ping_players(children childrens[N_PLAYERS])
 {
@@ -130,17 +130,17 @@ void ping_players(children childrens[N_PLAYERS])
 }
 
 /**
- * @brief Makes each player choose who to attack
+ * @brief Hace que cada jugador elija a quién atacar
  *
- * @details The first player will be asked to choose who to attack, then the other players will be asked to choose who to attack
- * If a player is dead, they will not be asked to choose.
- * After all players have chosen, the parent will send the choices to the respective targets
+ * @details Se le pedirá al primer jugador que elija a quién atacar, luego se le pedirá a los demás jugadores que elijan a quién atacar.
+ * Si un jugador está muerto, no se le pedirá que elija.
+ * Después de que todos los jugadores hayan elegido, el padre enviará las elecciones a los respectivos objetivos.
  *
- * @param childrens The array of children processes, with their respective pipes
+ * @param childrens El array de procesos hijos, con sus respectivas tuberías
  */
 void make_players_choose(children childrens[N_PLAYERS])
 {
-    ping_players(childrens); // Sinc and update alive status
+    ping_players(childrens); // Sincroniza y actualiza los estados de los jugadores
     char msg[MSG_SIZE] = "choose ";
 
     for (int i = 0; i < N_PLAYERS; i++)

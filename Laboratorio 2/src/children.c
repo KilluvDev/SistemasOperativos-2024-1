@@ -12,11 +12,11 @@ void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *aliv
 bool check_valid_target(int target, int players[N_PLAYERS], int alive);
 
 /**
- * @brief Main loop of the child process, listens to the parent and reacts to each message
+ * @brief Bucle principal del proceso hijo, escucha al padre y reacciona a cada mensaje
  *
- * @param id The id of the child
- * @param listen_parent The file descriptor to listen to the parent
- * @param tell_parent The file descriptor to tell the parent
+ * @param id El id del hijo
+ * @param listen_parent El descriptor de archivo para escuchar al padre
+ * @param tell_parent El descriptor de archivo para comunicarse con el padre
  */
 void main_loop(int id, int listen_parent, int tell_parent)
 {
@@ -52,7 +52,7 @@ void main_loop(int id, int listen_parent, int tell_parent)
             }
             else
             {
-                // User
+                // Usuario
                 printf("Your stats: %d HP | %d Attack | %d Defence | %d%% Evasion\n", life, attack, defense, evasion);
             }
             continue;
@@ -73,7 +73,7 @@ void main_loop(int id, int listen_parent, int tell_parent)
             }
             else
             {
-                // User
+                // Usuario
                 char text[100];
                 sprintf(text, "Choose a player to attack (%d", players[0]);
                 for (int i = 1; i < alive && i > 0; i++)
@@ -131,7 +131,7 @@ void main_loop(int id, int listen_parent, int tell_parent)
 
     while (1)
     {
-        // Wait for parent to send exit message
+        // Espera a que el padre envíe el mensaje de salida
 
         if (strcmp(msg, "exit") == 0)
         {
@@ -150,10 +150,10 @@ void main_loop(int id, int listen_parent, int tell_parent)
 }
 
 /**
- * @brief Checks if a message starts with a certain string
+ * @brief Verifica si un mensaje comienza con una cierta cadena
  *
- * @param msg The message to check
- * @param str The string to check if the message starts with
+ * @param msg El mensaje a verificar
+ * @param str La cadena para verificar si el mensaje comienza con ella
  * @return true
  * @return false
  */
@@ -167,12 +167,12 @@ bool starts_with(const char msg[MSG_SIZE], const char *str)
 }
 
 /**
- * @brief Extracts the integers from a string
+ * @brief Extrae los enteros de una cadena
  *
- * @param msg The message to extract the integers from
- * @param list The list to store the integers
- * @param alive The number of integers extracted
- * @param skip The number to skip
+ * @param msg El mensaje del cual extraer los enteros
+ * @param list La lista para almacenar los enteros
+ * @param alive El número de enteros extraídos
+ * @param skip El número a omitir
  */
 void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip)
 {
@@ -198,11 +198,11 @@ void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *aliv
 }
 
 /**
- * @brief Checks if the target is in the list of players
+ * @brief Verifica si el objetivo está en la lista de jugadores
  *
- * @param target The target to check
- * @param players The list of players
- * @param alive The number of alive players
+ * @param target El objetivo a verificar
+ * @param players La lista de jugadores
+ * @param alive El número de jugadores vivos
  * @return true
  * @return false
  */
