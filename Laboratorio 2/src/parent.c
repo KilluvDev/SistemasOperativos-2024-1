@@ -24,7 +24,7 @@ void make_rounds(children childrens[N_PLAYERS])
 
     children childrens[N_PLAYERS] es un array del struct children
     *****
-
+    La función efectúa las rondas mientras queden jugadores vivos
     *****
     Sin retorno.
     */
