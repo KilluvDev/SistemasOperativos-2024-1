@@ -13,21 +13,13 @@ void show_stats(children childrens[N_PLAYERS]);
 void ping_players(children childrens[N_PLAYERS]);
 void make_players_choose(children childrens[N_PLAYERS]);
 
+/**
+ * @brief Main loop of the parent process, manages the game. It will keep running until there is only one player left
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ */
 void make_rounds(children childrens[N_PLAYERS])
 {
-    /*
-    Función make_rounds.
-    tipo void.
-    *****
-    Parámetros:
-    childen childrens[N_PLAYERS]
-
-    children childrens[N_PLAYERS] es un array del struct children
-    *****
-    La función efectúa las rondas mientras queden jugadores vivos
-    *****
-    Sin retorno.
-    */
     show_stats(childrens);
     while (alive_count(childrens) > 1)
     {
@@ -70,44 +62,28 @@ void make_rounds(children childrens[N_PLAYERS])
     tell_players(childrens, "exit");
 }
 
+/**
+ * @brief Sends a message to all players
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ * @param msg The message to send
+ */
 void tell_players(children childrens[N_PLAYERS], char msg[MSG_SIZE])
 {
-    /*
-    Función tell_players.
-    tipo void.
-    *****
-    Parámetros:
-    children childrens[N_PLAYERS]
-    char msg[MSG_SIZE]
-
-    children childrens[N_PLAYERS] es el array del struct
-    char msg[MSG_SIZE] es el mensaje entre hijos
-    *****
-    La función se comunica entre hijos
-    *****
-    Sin retorno.
-    */
     for (int i = 0; i < N_PLAYERS; i++)
     {
         write(childrens[i].tell, msg, MSG_SIZE);
     }
 }
 
+/**
+ * @brief Counts the amount of players that are still alive
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ * @return The amount of players alive
+ */
 int alive_count(children childrens[N_PLAYERS])
 {
-    /*
-    Función alive_count.
-    tipo int.
-    *****
-    Parámetros:
-    children childrens[N_PLAYERS]
-
-    children childrens[N_PLAYERS] es el arreglo del struct de children.
-    *****
-    La función cuenta la cantidad de jugadores restantes.
-    *****
-    Retorna la cantidad de jugadores.
-    */
     ping_players(childrens);
 
     int count = 0;
@@ -119,21 +95,13 @@ int alive_count(children childrens[N_PLAYERS])
     return count;
 }
 
+/**
+ * @brief Tells each player to show their stats
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ */
 void show_stats(children childrens[N_PLAYERS])
 {
-    /*
-    Función show_stats.
-    tipo void.
-    *****
-    Parámetros:
-    children childrens[N_PLAYERS]
-
-    children childrens[N_PLAYERS] es el arreglo del struct de children.
-    *****
-    La función muestra el estatus de cada jugador
-    *****
-    Sin retorno.
-    */
     printf("\n##################### Showing stats #####################\n");
 
     tell_players(childrens, "show_stats");
@@ -142,21 +110,13 @@ void show_stats(children childrens[N_PLAYERS])
     printf("#########################################################\n\n");
 }
 
+/**
+ * @brief Pings all players to check if they are still alive. As side effect, it can also be used to synchronize the players
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ */
 void ping_players(children childrens[N_PLAYERS])
 {
-    /*
-    Función ping_players.
-    tipo void.
-    *****
-    Parámetros:
-    children childrens[N_PLAYERS]
-
-    children childrens[N_PLAYERS] es el arreglo del struct de children.
-    *****
-    La funcion revisa los jugadores y los sincroniza para el efecto del juego
-    *****
-    Sin retorno.
-    */
     tell_players(childrens, "ping");
     for (int i = 0; i < N_PLAYERS; i++)
     {
@@ -169,21 +129,17 @@ void ping_players(children childrens[N_PLAYERS])
     }
 }
 
+/**
+ * @brief Makes each player choose who to attack
+ *
+ * @details The first player will be asked to choose who to attack, then the other players will be asked to choose who to attack
+ * If a player is dead, they will not be asked to choose.
+ * After all players have chosen, the parent will send the choices to the respective targets
+ *
+ * @param childrens The array of children processes, with their respective pipes
+ */
 void make_players_choose(children childrens[N_PLAYERS])
 {
-    /*
-    Función make_players_choose.
-    tipo void.
-    *****
-    Parámetros:
-    children childrens[N_PLAYERS]
-
-    children childrens[N_PLAYERS] es el arreglo del struct de children.
-    *****
-    La función efectúa los cambios de estados entre los jugadores.
-    *****
-    Sin retorno.
-    */
     ping_players(childrens); // Sinc and update alive status
     char msg[MSG_SIZE] = "choose ";
 

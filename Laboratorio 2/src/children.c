@@ -11,27 +11,15 @@ bool starts_with(const char *pre, const char *str);
 void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip);
 bool check_valid_target(int target, int players[N_PLAYERS], int alive);
 
+/**
+ * @brief Main loop of the child process, listens to the parent and reacts to each message
+ *
+ * @param id The id of the child
+ * @param listen_parent The file descriptor to listen to the parent
+ * @param tell_parent The file descriptor to tell the parent
+ */
 void main_loop(int id, int listen_parent, int tell_parent)
 {
-    /*
-    Función main_loop.
-    tipo void.
-    *****
-    Parámetros:
-    int id 
-    int listen_parent
-    int tell_parent
-
-
-    int id  
-    int listen_parent
-    int tell_parent
-    *****
-    La función ejecuta el loop del combate entre jugadores realizando los cambios de estado de jugadores,
-    finalmente elige el ganador.
-    *****
-    Sin retorno.
-    */
     int life = 100;
     int attack = 30 + rand() % 11;
     int defense = 10 + rand() % 16;
@@ -161,23 +149,16 @@ void main_loop(int id, int listen_parent, int tell_parent)
     close(tell_parent);
 }
 
+/**
+ * @brief Checks if a message starts with a certain string
+ *
+ * @param msg The message to check
+ * @param str The string to check if the message starts with
+ * @return true
+ * @return false
+ */
 bool starts_with(const char msg[MSG_SIZE], const char *str)
 {
-    /*
-    Función starts_width.
-    tipo bool.
-    *****
-    Parámetros:
-    const char msg[MSG_SIZE]
-    const char *str
-
-    const char msg[MSG_SIZE] es un array de char
-    const char *str es un array de char
-    *****
-    La función 
-    *****
-    Retorna verdadero o falso.
-    */
     size_t lenmsg = strlen(msg),
            lenstr = strlen(str);
     return lenmsg < lenstr
@@ -195,25 +176,6 @@ bool starts_with(const char msg[MSG_SIZE], const char *str)
  */
 void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *alive, int skip)
 {
-    /*
-    Función extract_ints_from_string.
-    tipo void.
-    *****
-    Parámetros:
-    char msg[MSG_SIZE]
-    int list[N_PLAYERS]
-    int *alive
-    int skip
-
-    msg[MSG_SIZE] es un array de char con su respectivo tamaño
-    int list[N_PLAYERS] es un array de enteros con la cantidad de jugadores
-    int *alive es el puntero de si el jugador está con vida
-    int skip
-    *****
-    La función extrae enteros de un string
-    *****
-    Sin retorno.
-    */
     char *c = msg;
     int i = 0;
     *alive = 0;
@@ -246,23 +208,6 @@ void extract_ints_from_string(char msg[MSG_SIZE], int list[N_PLAYERS], int *aliv
  */
 bool check_valid_target(int target, int players[N_PLAYERS], int alive)
 {
-    /*
-    Función check_valid_target.
-    tipo bool.
-    *****
-    Parámetros:
-    int target
-    int players[N_PLAYERS]
-    int alive
-
-    int target es el número de jugador.
-    int players es un array de los jugadores con su respectivo índice
-    int alive indica si el objetivo tiene vida.
-    *****
-    La función revisa que el objetivo esté con vida.
-    *****
-    Retorna verdadero o falso.
-    */
     for (int i = 0; i < alive; i++)
     {
         if (players[i] == target)
