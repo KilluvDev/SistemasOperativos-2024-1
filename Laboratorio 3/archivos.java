@@ -31,4 +31,42 @@ public class archivo {
         }
         return mapa;
     }
+
+    public int size(String direccion) {
+        int n = 0;
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(direccion));
+            String temp = "";
+            String[] aux;
+            temp = bf.readLine();
+            aux = temp.split("x");
+            n = Integer.parseInt(aux[0]);
+        } catch (Exception e) {
+            System.out.println("Archivo no encontrado");
+        }
+        return n;
+    }
+
+    public int[] posicion(String direccion) {
+        int[] pos = new int[2];
+        String aux = "";
+        String[] posicionaux;
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(direccion));
+            String temp = "";
+            temp = bf.readLine();
+            temp = bf.readLine();
+            aux = temp;
+        } catch (Exception e) {
+            System.out.println("Archivo no encontrado");
+        }
+        posicionaux = aux.split(",");
+        aux = posicionaux[0];
+        aux = aux.replace("[", "");
+        pos[0] = Integer.parseInt(aux);
+        aux = posicionaux[1];
+        aux = aux.replace("]", "");
+        pos[1] = Integer.parseInt(aux);
+        return pos;
+    }
 }
