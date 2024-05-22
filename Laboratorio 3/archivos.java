@@ -11,7 +11,6 @@ public class archivo {
             BufferedReader bf = new BufferedReader(new FileReader(direccion));
 
             String bfRead, temp = "", tamanio, posicion;
-            int i = 0;
             tamanio = bf.readLine();
             posicion = bf.readLine();
             while ((bfRead = bf.readLine()) != null) {
