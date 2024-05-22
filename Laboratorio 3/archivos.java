@@ -1,34 +1,35 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class archivos {
-    public int[][] Map(String direccion) {
-        int[][] mapa;
+public class archivo {
+    public String[][] Map(String direccion) {
+        String[][] mapa;
+        String[] linea, sizen;
+        int n;
+        String texto = "", size = "", pos = "";
         try {
             BufferedReader bf = new BufferedReader(new FileReader(direccion));
-            String[] size;
 
-            String bfRead, temp = "";
-            int n;
-            bfRead = bf.readLine();
-            size = bfRead.split("x");
-            n = Integer.parseInt(size[0]);
-            mapa = new int[n][n]; // creación de la matriz para el mapa
-            String pos;
-            pos = bf.readLine(); // pos inicial
-            String[] linea;
+            String bfRead, temp = "", tamanio, posicion;
             int i = 0;
+            tamanio = bf.readLine();
+            posicion = bf.readLine();
             while ((bfRead = bf.readLine()) != null) {
-                temp = bfRead;
-                linea = temp.split(" ");
-                for (int j = 0; j < n; j++) {
-                    mapa[i][j] = Integer.parseInt(linea[j]);
-                }
-                i++;
+                temp = temp + bfRead + "\n"; // Agarra solo el mapa
             }
-            return mapa;
+            texto = temp;
+            size = tamanio;
+            pos = posicion;
         } catch (Exception e) {
             System.out.println("Archivo no encontrado");
         }
+        linea = texto.split("\n");
+        sizen = size.split("x");
+        n = Integer.parseInt(sizen[0]);
+        mapa = new String[n][n];
+        for (int i = 0; i < n; i++) {
+            mapa[i] = linea[i].split(" ");
+        }
+        return mapa;
     }
 }
