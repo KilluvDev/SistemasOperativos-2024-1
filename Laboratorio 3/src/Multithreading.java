@@ -47,7 +47,7 @@ public class Multithreading extends Thread {
             return;
         }
 
-        SolveMazeWithForks.setVisited(this.position.x, this.position.y);
+        Multithreading.setVisited(this.position.x, this.position.y);
 
         if (this.laberynth.isEnd(this.position)) {
             this.onEnd();
@@ -55,7 +55,7 @@ public class Multithreading extends Thread {
 
         ArrayList<Vector> paths = this.laberynth.getPaths(position);
         paths.removeIf(p -> p.equals(position.sub(this.direction)));
-        paths.removeIf(p -> SolveMazeWithForks.isVisited(p.x, p.y));
+        paths.removeIf(p -> Multithreading.isVisited(p.x, p.y));
 
         if (paths.size() == 0) {
             this.onDeadEnd();
