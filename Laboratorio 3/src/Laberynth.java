@@ -37,12 +37,14 @@ public class Laberynth {
         this.map = new String[this.size.y][this.size.x];
         for (int i = 2; i < lineas.size(); i++) {
             String[] row = lineas.get(i).split(" ");
+
             for (int j = 0; j < row.length; j++) {
+                this.map[i - 2][j] = row[j];
                 if (row[j].equals("S")) {
                     this.end = new Vector(j, i - 2);
                 }
             }
-            this.map[i - 2] = row;
+
         }
     }
 
@@ -70,4 +72,22 @@ public class Laberynth {
         return paths;
     }
 
+    public void show() {
+        for (int j = -1; j <= this.size.y; j++) {
+            for (int i = -1; i <= this.size.x; i++) {
+                if (this.isWall(new Vector(i, j))) {
+                    System.out.print("0 ");
+                } else {
+                    if (this.isEnd(new Vector(i, j))) {
+                        System.out.print("S ");
+                    } else if (this.init.equals(new Vector(i, j))) {
+                        System.out.print("E ");
+                    } else {
+                        System.out.print("  ");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
 }

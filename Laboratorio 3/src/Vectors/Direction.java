@@ -22,6 +22,22 @@ public class Direction extends Vector {
         }
     }
 
+    public Direction(Vector origin, Vector destination) {
+        int deltaX = destination.x - origin.x;
+        int deltaY = destination.y - origin.y;
+
+        if (deltaX != 0) {
+            deltaX = deltaX / Math.abs(deltaX);
+        }
+
+        if (deltaY != 0) {
+            deltaY = deltaY / Math.abs(deltaY);
+        }
+
+        this.x = deltaX;
+        this.y = deltaY;
+    }
+
     public static Direction[] getDirections() {
         return new Direction[] {
             new Direction(Direction.Directions.UP),

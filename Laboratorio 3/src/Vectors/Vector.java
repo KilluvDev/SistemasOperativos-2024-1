@@ -29,4 +29,15 @@ public class Vector {
     public Boolean equals(Vector v) {
         return this.x == v.x && this.y == v.y;
     }
+
+    public Vector copy() {
+        return new Vector(this.x, this.y);
+    }
+
+    public void show(String name) {
+        System.out.println(name + ": (" + this.x + ", " + this.y + ")");
+    }
+    public void show() {
+        System.out.println("(" + this.x + ", " + this.y + ")");
+    }
 }
