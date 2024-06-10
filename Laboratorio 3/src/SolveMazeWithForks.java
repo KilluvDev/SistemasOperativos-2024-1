@@ -11,6 +11,27 @@ public class SolveMazeWithForks extends RecursiveTask<Integer> {
     Direction direction;
 
     static Boolean found = false;
+    static ArrayList<ArrayList<Boolean>> visited = new ArrayList<ArrayList<Boolean>>();
+
+    public static void setVisited(int x, int y) {
+        while (visited.size() <= y) {
+            visited.add(new ArrayList<Boolean>());
+        }
+
+        while (visited.get(y).size() <= x) {
+            visited.get(y).add(false);
+        }
+
+        visited.get(y).set(x, true);
+    }
+
+    public static Boolean isVisited(int x, int y) {
+        if (y < 0 || y >= visited.size() || x < 0 || x >= visited.get(y).size()) {
+            return false;
+        }
+
+        return visited.get(y).get(x);
+    }
 
     public SolveMazeWithForks(Laberynth laberynth, Vector position, Direction direction) {
         this.laberynth = laberynth;
@@ -29,12 +50,15 @@ public class SolveMazeWithForks extends RecursiveTask<Integer> {
             return;
         }
 
+        SolveMazeWithForks.setVisited(this.position.x, this.position.y);
+
         if (this.laberynth.isEnd(this.position)) {
             this.onEnd();
         }
 
         ArrayList<Vector> paths = this.laberynth.getPaths(position);
         paths.removeIf(p -> p.equals(position.sub(this.direction)));
+        paths.removeIf(p -> SolveMazeWithForks.isVisited(p.x, p.y));
 
         if (paths.size() == 0) {
             this.onDeadEnd();
@@ -61,6 +85,9 @@ public class SolveMazeWithForks extends RecursiveTask<Integer> {
     }
 
     private void onMultipleOptions(ArrayList<Vector> paths) {
+        if (SolveMazeWithForks.found) {
+            return;
+        }
         ArrayList<SolveMazeWithForks> forks = new ArrayList<SolveMazeWithForks>();
         ForkJoinPool pool = new ForkJoinPool();
 
