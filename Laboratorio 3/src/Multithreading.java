@@ -26,44 +26,51 @@ public class Multithreading extends Thread {
             return;
         }
 
-        // this.position.show("Position");
-
         if (this.laberynth.isEnd(this.position)) {
-            this.position.show("End");
-            Multithreading.found = true;
-            return;
+            this.onEnd();
         }
+
         ArrayList<Vector> paths = this.laberynth.getPaths(position);
         paths.removeIf(p -> p.equals(position.sub(this.direction)));
 
         if (paths.size() == 0) {
-            // Dead end
-            this.position.show("Dead end");
-            return;
+            this.onDeadEnd();
         } else if (paths.size() == 1) {
-            // Only one path
-            Vector path = paths.get(0);
-            this.direction = new Direction(this.position, path);
-            this.position = this.position.add(this.direction);
-            this.iterate();
+            this.onOneOption(paths.get(0));
         } else {
-            // Multiple paths
-            ArrayList<Multithreading> threads = new ArrayList<Multithreading>();
-            for (Vector path : paths) {
-                Direction direction = new Direction(this.position, path);
-                threads.add(new Multithreading(this.laberynth, path, direction));
-            }
+            this.onMultipleOptions(paths);
+        }
+    }
 
-            for (Multithreading thread : threads) {
-                thread.start();
-            }
+    private void onDeadEnd() {
+        this.position.show("Dead end");
+    }
 
-            for (Multithreading thread : threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    private void onEnd() {
+        this.position.show("End");
+        Multithreading.found = true;
+    }
+
+    private void onOneOption(Vector path) {
+        this.direction = new Direction(this.position, path);
+        this.position = this.position.add(this.direction);
+        this.iterate();
+    }
+
+    private void onMultipleOptions(ArrayList<Vector> paths) {
+        ArrayList<Multithreading> threads = new ArrayList<Multithreading>();
+        for (Vector path : paths) {
+            Direction direction = new Direction(this.position, path);
+            Multithreading thread = new Multithreading(this.laberynth, path, direction);
+            threads.add(thread);
+            thread.start();
+        }
+
+        for (Multithreading thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

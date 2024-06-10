@@ -11,7 +11,7 @@ public class MazeSolver {
     }
 
     public long solveWithThreads() {
-        long startTime = (int) System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         Vector direction = this.laberynth.init.copy();
         ArrayList<Vector> options = this.laberynth.getPaths(direction);
         ArrayList<Multithreading> threads = new ArrayList<Multithreading>();
@@ -32,7 +32,7 @@ public class MazeSolver {
             }
         }
 
-        long endTime = (int) System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         return endTime - startTime;
     }
 
