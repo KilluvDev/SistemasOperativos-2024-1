@@ -73,8 +73,8 @@ public class Laberynth {
     }
 
     public void show() {
-        for (int j = -1; j <= this.size.y; j++) {
-            for (int i = -1; i <= this.size.x; i++) {
+        for (int j = 0; j < this.size.y; j++) {
+            for (int i = 0; i < this.size.x; i++) {
                 if (this.isWall(new Vector(i, j))) {
                     System.out.print("0 ");
                 } else {
