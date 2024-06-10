@@ -1,28 +1,31 @@
 import java.util.ArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
 import Vectors.Direction;
 import Vectors.Vector;
 
-public class Multithreading extends Thread {
-    private Laberynth laberynth;
-    private Vector position;
-    private Direction direction;
+public class SolveMazeWithForks extends RecursiveTask<Integer> {
+    Laberynth laberynth;
+    Vector position;
+    Direction direction;
 
     static Boolean found = false;
 
-    public Multithreading(Laberynth laberynth, Vector position, Direction direction) {
+    public SolveMazeWithForks(Laberynth laberynth, Vector position, Direction direction) {
         this.laberynth = laberynth;
         this.position = position;
         this.direction = direction;
     }
 
     @Override
-    public void run() {
+    protected Integer compute() {
         this.iterate();
+        return 0;
     }
 
     private void iterate() {
-        if (Multithreading.found) {
+        if (SolveMazeWithForks.found) {
             return;
         }
 
@@ -48,7 +51,7 @@ public class Multithreading extends Thread {
 
     private void onEnd() {
         this.position.show("End");
-        Multithreading.found = true;
+        SolveMazeWithForks.found = true;
     }
 
     private void onOneOption(Vector path) {
@@ -58,21 +61,19 @@ public class Multithreading extends Thread {
     }
 
     private void onMultipleOptions(ArrayList<Vector> paths) {
-        ArrayList<Multithreading> threads = new ArrayList<Multithreading>();
+        ArrayList<SolveMazeWithForks> forks = new ArrayList<SolveMazeWithForks>();
+        ForkJoinPool pool = new ForkJoinPool();
+
 
         for (Vector path : paths) {
             Direction direction = new Direction(this.position, path);
-            Multithreading thread = new Multithreading(this.laberynth, path, direction);
-            threads.add(thread);
-            thread.start();
+            SolveMazeWithForks fork = new SolveMazeWithForks(this.laberynth, path, direction);
+            forks.add(fork);
+            pool.execute(fork);
         }
 
-        for (Multithreading thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        for (SolveMazeWithForks fork : forks) {
+            fork.join();
         }
     }
 }

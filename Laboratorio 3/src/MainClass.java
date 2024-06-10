@@ -8,8 +8,8 @@ public class MainClass {
 
         MazeSolver mazeSolver = new MazeSolver(map);
 
-        long time = mazeSolver.solveWithThreads();
-        // int time = mazeSolver.solveWithForks();
+        // long time = mazeSolver.solveWithThreads();
+        long time = mazeSolver.solveWithForks();
 
         System.out.println("Time: " + time);
     }
