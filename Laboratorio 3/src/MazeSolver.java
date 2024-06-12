@@ -33,6 +33,9 @@ public class MazeSolver {
             }
         }
 
+        Multithreading.visited.clear();
+        Multithreading.found = false;
+
         long endTime = System.currentTimeMillis();
         return endTime - startTime;
     }
@@ -54,6 +57,9 @@ public class MazeSolver {
         for (SolveMazeWithForks task : tasks) {
             task.join();
         }
+
+        SolveMazeWithForks.visited.clear();
+        SolveMazeWithForks.found = false;
 
         long endTime = System.currentTimeMillis();
         return endTime - startTime;
